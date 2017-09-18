@@ -29,7 +29,17 @@ describe 'Gearbest API' do
       page: 1
     })
 
-    expect(JSON.parse(response.body)['error_no']).to eq(0)
+      expect(response['total_results']).to be > 0
+  end
+
+  it 'completed-orders bad requests' do
+    expect {
+      gearbest.orders.completed_orders({
+        start_date: Date.today.prev_month,
+        end_date: Date.today.next_day,
+        page: -1
+      })
+    }.to raise_error(Gearbest::Errors::BadRequest)
   end
 
   it 'list-promotion-products requests' do
@@ -41,6 +51,6 @@ describe 'Gearbest API' do
       page: 1
     })
 
-    expect(JSON.parse(response.body)['error_no']).to eq(0)
+    expect(response['total_results']).to be > 0
   end
 end

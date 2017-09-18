@@ -2,6 +2,8 @@ require 'rest-client'
 require 'json'
 
 require 'gearbest/version'
+require 'gearbest/errors'
+require 'gearbest/response'
 require 'gearbest/requests'
 
 Dir[

@@ -21,7 +21,9 @@ module Gearbest
         _response = JSON.parse(response.body)
 
         if _response['error_no'].to_i == 0
-          _response['data']
+          _response['data'].any? ? _response['data'] : JSON.parse({
+            total_results: 0, total_pages: 0, items: []
+          }.to_json)
         else
           raise Gearbest::Errors::BadRequest.new(
             "#{_response['error_no']} / #{_response['msg']}"

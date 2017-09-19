@@ -22,12 +22,10 @@ module Gearbest
         end
 
         page = 1
-
         begin
           response = completed({
             start_date: created_at, end_date: created_at, page: page
           })
-
           order = response['items'].find {|item|
             item['order_number'] == params[:order_number]
           }

@@ -16,7 +16,7 @@ module Gearbest
 		class UnauthorizedAccess < CustomError;         self.code = 401 end
 		class Forbidden < CustomError;                  self.code = 403 end
 		class NotFound < CustomError;                   self.code = 404 end
-		class ObjectBroken   < CustomError;             self.code = 404 end
+		class TooManyRequests < CustomError;            self.code = 429 end
 		class Internal < CustomError;                   self.code = 500 end
 		class ExternalServiceUnavailable < CustomError; self.code = 503 end
   end

@@ -25,9 +25,16 @@ module Gearbest
             total_results: 0, total_pages: 0, items: []
           }.to_json)
         else
-          raise Gearbest::Errors::BadRequest.new(
-            "#{_response['error_no']} / #{_response['msg']}"
-          )
+          case _response['error_no']
+          when 1003
+            raise Gearbest::Errors::TooManyRequests.new(
+              "#{_response['error_no']} / #{_response['msg']}"
+            )
+          else
+            raise Gearbest::Errors::BadRequest.new(
+              "#{_response['error_no']} / #{_response['msg']}"
+            )
+          end
         end
       end
     end

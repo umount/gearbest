@@ -7,7 +7,7 @@ module Gearbest
         end
       end
 
-      def get_by_order(params)
+      def get_by_number(params)
         if !params.is_a?(Hash) || !params.key?(:order_number)
           raise Gearbest::Errors::BadRequest.new(
             "1002 / Invalid Arguments: id invalid"

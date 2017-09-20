@@ -34,7 +34,7 @@ describe 'Gearbest API' do
 
   it 'completed-orders bad requests' do
     expect {
-      gearbest.orders.completed_orders({
+      gearbest.orders.completed({
         start_date: Date.today.prev_month,
         end_date: Date.today.next_day,
         page: -1
@@ -44,17 +44,17 @@ describe 'Gearbest API' do
 
   it 'get order by number' do
     created_at = Date.parse('2017-09-14')
-    response = gearbest.orders.get_by_order({
+    response = gearbest.orders.get_by_number({
       order_number: 'W1709140851570083',
       created_at: created_at
     })
 
-    expect(response).to eq(1)
+    expect(response['order_number']).to eq('W1709140851570083')
   end
 
   it 'get order not found by number and wrong' do
     expect {
-      response = gearbest.orders.get_by_order({
+      response = gearbest.orders.get_by_number({
         order_number: 'W1709140851570083'
       })
     }.to raise_error(Gearbest::Errors::NotFound)

@@ -1,10 +1,12 @@
 module Gearbest
   module Requests
-    class Products < Gearbest::Requests::Gateway
+    class Products
+      include Gearbest::Requests::InstanceModule
+
       def list_promotion(params)
-        Gearbest::Response.parse_request do
-          request('list-promotion-products', params)
-        end
+        api_endpoint 'list-promotion-products'
+
+        response(params)
       end
     end
   end

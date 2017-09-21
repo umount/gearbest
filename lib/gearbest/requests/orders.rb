@@ -1,10 +1,12 @@
 module Gearbest
   module Requests
-    class Orders < Gearbest::Requests::Gateway
+    class Orders
+      include Gearbest::Requests::InstanceModule
+
       def completed(params)
-        Gearbest::Response.parse_request do
-          request('completed-orders', params)
-        end
+        api_endpoint 'completed-orders'
+
+        response(params)
       end
 
       def get_by_number(params)

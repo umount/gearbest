@@ -18,8 +18,8 @@ describe 'Gearbest API' do
   end
 
   it 'autoload requests class' do
-    expect(gearbest.orders.configure).to include(:api_key, :api_secret)
-    expect(gearbest.products.configure).to include(:api_key, :api_secret)
+    expect(gearbest.orders.config).to include(:api_key, :api_secret)
+    expect(gearbest.products.config).to include(:api_key, :api_secret)
   end
 
   it 'completed-orders requests' do
@@ -58,6 +58,16 @@ describe 'Gearbest API' do
         order_number: 'W1709140851570083'
       })
     }.to raise_error(Gearbest::Errors::NotFound)
+  end
+
+  it 'get completed orders http respose' do
+    response = gearbest.orders.api_endpoint('completed-orders').request({
+      start_date: Date.today.prev_month,
+      end_date: Date.today.next_day,
+      page: 1
+    })
+
+    expect(response).to be_a_kind_of(RestClient::Response)
   end
 
   it 'list-promotion-products requests' do

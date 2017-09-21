@@ -1,10 +1,8 @@
 ## Information
-----
 
 This gems for Affiliate Gearbest Programm.
 
 ## Installation
-------------
 
 Add this line to your application's Gemfile:
 
@@ -45,6 +43,13 @@ response_list = gearbest.products.list_promotion({
   end_date: Date.today.next_day,
   currency: 'USD',
   lkid: '0',
+  page: 1
+})
+
+# If you don't want get parsed response use endpoint request
+http_response = gearbest.orders.api_endpoint('completed-orders').request({
+  start_date: Date.today.prev_month,
+  end_date: Date.today.next_day,
   page: 1
 })
 ```

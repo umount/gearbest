@@ -14,37 +14,40 @@ module Gearbest
         class_name = "Gearbest::Requests::#{class_path}"
 
         if Object.const_defined?(class_name)
-          _instanse = Object.const_get(class_name)
-          _instanse.new(@config)
+          _instanse = Object.const_get(class_name).new
+          _instanse.config = @config
+          _instanse
         else
           super
         end
       end
     end
 
-    class Gateway
-      def initialize(params={})
-        configure(params)
+    module InstanceModule
+      mattr_accessor :config
+
+      def response(params)
+        Gearbest::Response.parse_request do
+          request(params)
+        end
       end
 
-      def configure(config=false)
-        @config = config || @config
-      end
-
-      def request(method_name, params)
+      def request(params)
         _params = {
-          api_key: @config[:api_key], time: DateTime.now().to_time.to_i
+          api_key: config[:api_key], time: DateTime.now().to_time.to_i
         }
         params = _params.merge(params)
         params.merge!(add_signature(params))
 
-        RestClient.get(api_endpoint(method_name), { params: params })
+        RestClient.get(@api_url, { params: params })
       end
 
-      def api_endpoint(method_name)
+      def api_endpoint(path)
         url_path = self.class.name.split('::').last.downcase
 
-        "#{@config[:api_url]}/#{url_path}/#{method_name}"
+        @api_url = "#{config[:api_url]}/#{url_path}/#{path}"
+
+        self
       end
 
       # strtoupper(md5(appSecretbar2baz3foo1appSecret));
@@ -52,7 +55,7 @@ module Gearbest
         sign_string = params.sort.map(&:join).join
 
         sign = Digest::MD5.hexdigest(
-          @config[:api_secret] + sign_string + @config[:api_secret]
+          config[:api_secret] + sign_string + config[:api_secret]
         ).upcase
 
         params.merge({sign: sign})

@@ -8,11 +8,17 @@ module Gearbest
           Gearbest::Errors::Internal.new(error)
         end
 
-        if response.code == 200
-          fetch_data(response)
+        if response.is_a?(RestClient::Response)
+          if response.code == 200
+            fetch_data(response)
+          else
+            raise Gearbest::Errors::ExternalServiceUnavailable.new(
+              "#{response.code} / #{response.body}"
+            )
+          end
         else
           raise Gearbest::Errors::ExternalServiceUnavailable.new(
-            "#{response.code} / #{response.body}"
+            "WTF? #{response.inspect}"
           )
         end
       end
